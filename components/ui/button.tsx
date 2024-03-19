@@ -14,6 +14,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           "disabled:cursor-not-allowed disabled:opacity-50 hover:opacity-75",
           className
         )}
+        disabled={disabled}
         {...props}
       >
         {children}
