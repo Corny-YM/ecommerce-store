@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import useCart from "@/hooks/use-cart";
-import Button from "@/components/ui/button";
+import ButtonBasic from "@/components/ui/button-basic";
 import Currency from "@/components/ui/currency";
 
 const Summary = () => {
@@ -47,13 +47,13 @@ const Summary = () => {
           <Currency value={totalPrice} />
         </div>
       </div>
-      <Button
+      <ButtonBasic
         disabled={items.length === 0}
         className="w-full mt-6"
         onClick={onCheckout}
       >
         Checkout
-      </Button>
+      </ButtonBasic>
     </div>
   );
 };

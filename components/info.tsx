@@ -1,6 +1,6 @@
 import { Product } from "@/type";
 import { ShoppingCart } from "lucide-react";
-import Button from "@/components/ui/button";
+import ButtonBasic from "@/components/ui/button-basic";
 import Currency from "@/components/ui/currency";
 
 interface Props {
@@ -32,9 +32,9 @@ const Info = ({ data }: Props) => {
       </div>
 
       <div className="mt-10 flex items-center gap-x-3">
-        <Button className="flex items-center gap-x-2">
+        <ButtonBasic className="flex items-center gap-x-2">
           Add To Cart <ShoppingCart />
-        </Button>
+        </ButtonBasic>
       </div>
     </div>
   );

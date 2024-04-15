@@ -4,7 +4,7 @@ import qs from "query-string";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/libs/utils";
 import { Color, Size } from "@/type";
-import Button from "@/components/ui/button";
+import ButtonBasic from "@/components/ui/button-basic";
 
 interface Props {
   data: (Size | Color)[];
@@ -48,7 +48,7 @@ const Filter = ({ data, name, valueKey }: Props) => {
       <div className="flex flex-wrap gap-2">
         {data.map((filter) => (
           <div key={filter.id} className="flex items-center">
-            <Button
+            <ButtonBasic
               className={cn(
                 "rounded-md text-sm text-gray-800 p-2",
                 "border border-gray-300 bg-white",
@@ -57,7 +57,7 @@ const Filter = ({ data, name, valueKey }: Props) => {
               onClick={() => onClick(filter.id)}
             >
               {filter.name}
-            </Button>
+            </ButtonBasic>
           </div>
         ))}
       </div>
