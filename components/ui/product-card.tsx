@@ -3,21 +3,25 @@
 import Image from "next/image";
 import { MouseEventHandler } from "react";
 import { useRouter } from "next/navigation";
-import { Expand, ShoppingCart } from "lucide-react";
+import { Expand, Info, ShoppingCart } from "lucide-react";
 import { Product } from "@/type";
 import useCart from "@/hooks/use-cart";
 import usePreviewModal from "@/hooks/use-preview-modal";
 import Currency from "@/components/ui/currency";
 import IconButton from "@/components/ui/icon-button";
+import { useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
+import { Button } from "./button";
 
 interface Props {
   data: Product;
 }
 
 const ProductCard = ({ data }: Props) => {
+  const { user } = useUser();
+  const cart = useCart();
   const router = useRouter();
   const previewModal = usePreviewModal();
-  const cart = useCart();
 
   const handleClick = () => {
     router.push(`/product/${data?.id}`);
@@ -30,7 +34,23 @@ const ProductCard = ({ data }: Props) => {
 
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation();
-    cart.addItem(data);
+    if (user) return cart.addItem(data);
+
+    toast((t) => (
+      <span className="flex gap-x-2 justify-center items-center font-medium">
+        <Info size={20} className="text-blue-600" />
+        Login to unlock this feature
+        <Button
+          className="bg-blue-600 hover:bg-blue-700 transition shadow-md"
+          onClick={() => {
+            toast.dismiss(t.id);
+            router.push("/sign-in");
+          }}
+        >
+          Dismiss
+        </Button>
+      </span>
+    ));
   };
 
   return (

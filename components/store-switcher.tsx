@@ -1,11 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import { Check, ChevronsUpDown, Store as StoreIcon } from "lucide-react";
 
 import { Store } from "@/type";
-import { cn } from "@/lib/utils";
+import { cn } from "@/libs/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -14,44 +13,31 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandShortcut,
 } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useStoreContext } from "@/providers/store-provider";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
-interface StoreSwitcherProps extends PopoverTriggerProps {
-  items: Store[];
-}
+interface StoreSwitcherProps extends PopoverTriggerProps {}
 
-const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
-  const params = useParams();
+const StoreSwitcher = ({ className }: StoreSwitcherProps) => {
+  const { stores, currentStore, setCurrentStore } = useStoreContext();
+
   const [open, setOpen] = useState(false);
 
-  const formattedItems = useMemo(
-    () =>
-      items.map((item) => ({
-        label: item.name,
-        value: item.id,
-      })),
-    [items]
-  );
-
-  const currentStore =
-    formattedItems.find((item) => item.value === params?.storeId) ||
-    formattedItems[0];
-
-  const onStoreSelect = (store: { value: string; label: string }) => {
-    console.log(store);
+  const onStoreSelect = useCallback((store: Store) => {
+    setCurrentStore(store);
     setOpen(false);
-  };
+  }, []);
 
+  if (!stores.length) return null;
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -64,7 +50,7 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
           className={cn("w-36 justify-between", className)}
         >
           <StoreIcon className="mr-2 h-4 w-4" />
-          {currentStore?.label}
+          {currentStore?.name}
           <ChevronsUpDown className="ml-auto w-4 h-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -75,18 +61,18 @@ const StoreSwitcher = ({ className, items = [] }: StoreSwitcherProps) => {
             <CommandInput placeholder="Search store..." />
             <CommandEmpty>No store found</CommandEmpty>
             <CommandGroup heading="Stores">
-              {formattedItems.map((store) => (
+              {stores.map((store) => (
                 <CommandItem
                   className="text-sm"
-                  key={store.value}
+                  key={store.id}
                   onSelect={() => onStoreSelect(store)}
                 >
                   <StoreIcon className="mr-2 w-4 h-4" />
-                  {store.label}
+                  {store.name}
                   <Check
                     className={cn(
                       "ml-auto w-4 h-4",
-                      currentStore?.value === store.value
+                      currentStore?.id === store.id
                         ? "opacity-100"
                         : "opacity-0"
                     )}
