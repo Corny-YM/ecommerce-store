@@ -47,7 +47,7 @@ const ProductCard = ({ data }: Props) => {
             router.push("/sign-in");
           }}
         >
-          Dismiss
+          Login
         </Button>
       </span>
     ));

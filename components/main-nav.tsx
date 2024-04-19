@@ -25,7 +25,7 @@ const MainNav = () => {
       setCategories(res);
     };
     fetch();
-  }, [currentStore]);
+  }, [currentStore, pathname]);
 
   const routes = useMemo(
     () =>
@@ -34,7 +34,7 @@ const MainNav = () => {
         label: route.name,
         active: pathname === `/category/${route.id}`,
       })) || [],
-    [categories]
+    [categories, currentStore]
   );
 
   return (

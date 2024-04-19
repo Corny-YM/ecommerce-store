@@ -1,15 +1,9 @@
 import { Color } from "@/type";
+import { storeInstance } from "@/libs";
 
-const URL = `${process.env.NEXT_PUBLIC_API_URL}/colors`;
-
-const getColors = async (): Promise<Color[]> => {
-  const res = await fetch(URL, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return res.json();
+const getColors = async (storeId: string): Promise<Color[]> => {
+  const res = await storeInstance.get(`${storeId}/colors`);
+  return res.data;
 };
 
 export default getColors;

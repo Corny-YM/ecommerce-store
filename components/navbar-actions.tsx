@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleUserRound, LogIn, ShoppingBag } from "lucide-react";
+import { CircleUserRound, ShoppingBag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserButton, useAuth } from "@clerk/nextjs";
@@ -11,7 +11,7 @@ import ButtonBasic from "@/components/ui/button-basic";
 const NavbarActions = () => {
   const router = useRouter();
   const cart = useCart();
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { userId } = useAuth();
 
   const [isMounted, setIsMounted] = useState(false);
 
