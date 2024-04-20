@@ -1,15 +1,12 @@
 import { Store } from "@/type";
+import { storeInstance } from "@/libs";
 
-const URL = `http://localhost:3000/api/`;
+const URL = process.env.NEXT_PUBLIC_APP_API_URL;
 
 const getStores = async (): Promise<Store[]> => {
-  const res = await fetch(`${URL}/stores`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await storeInstance.get(`${URL}/stores`);
 
-  return res.json();
+  return res.data || [];
 };
 
 export default getStores;

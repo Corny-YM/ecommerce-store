@@ -8,11 +8,10 @@ import { Product } from "@/type";
 import { useStoreContext } from "@/providers/store-provider";
 
 interface Props {
-  title: string;
   params: IProductParams;
 }
 
-const ProductList = ({ params, title }: Props) => {
+const ProductList = ({ params }: Props) => {
   const { currentStore } = useStoreContext();
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -26,10 +25,9 @@ const ProductList = ({ params, title }: Props) => {
   }, [params, currentStore]);
 
   return (
-    <div className="space-y-4">
-      <h3 className="font-bold text-3xl">{title}</h3>
+    <div className="mt-6 lg:col-span-4 lg:mt-0">
       {products.length === 0 && <NoResults />}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {products.map((item) => (
           <ProductCard key={item.id} data={item} />
         ))}

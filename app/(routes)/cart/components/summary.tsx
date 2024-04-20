@@ -28,6 +28,7 @@ const Summary = () => {
   }, 0);
 
   const onCheckout = async () => {
+    // TODO: fix api
     const res = await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
       {
