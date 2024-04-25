@@ -83,7 +83,8 @@ const ProductCard = ({ data }: Props) => {
       {/* Description */}
       <div>
         <p className="font-semibold text-lg">{data.name}</p>
-        <p className="text-sm text-gray-500">{data.category?.name}</p>
+        {/* <p className="text-sm text-gray-500">{data.category?.name}</p> */}
+        <p className="text-sm text-gray-500">theanh</p>
       </div>
 
       {/* Price */}

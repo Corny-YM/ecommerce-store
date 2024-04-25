@@ -40,7 +40,7 @@ const ProductDetail = ({ productId }: Props) => {
       <hr className="my-10" />
       <ProductList
         title="Related Items"
-        params={{ categoryId: product.category?.id }}
+        params={{ categoryId: product.categoryHasProducts[0].categoryId }}
       />
     </div>
   );

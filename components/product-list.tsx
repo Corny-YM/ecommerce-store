@@ -1,11 +1,12 @@
 "use client";
 
-import NoResults from "@/components/ui/no-results";
-import ProductCard from "@/components/ui/product-card";
-import getProducts, { IProductParams } from "@/actions/get-products";
 import { useEffect, useState } from "react";
+
 import { Product } from "@/type";
 import { useStoreContext } from "@/providers/store-provider";
+import getProducts, { IProductParams } from "@/actions/get-products";
+import NoResults from "@/components/ui/no-results";
+import ProductCard from "@/components/ui/product-card";
 
 interface Props {
   title: string;

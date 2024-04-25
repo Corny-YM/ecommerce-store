@@ -34,9 +34,9 @@ export const StoreContextProvider = ({ children, stores }: Props) => {
   const [currentStore, setCurrentStore] = useState<Store | null>(stores[0]!);
 
   useEffect(() => {
-    if (!currentStore) return;
-    router.push("/");
-  }, [currentStore]);
+    if (!currentStore) router.push("/");
+    localStorage.setItem("store", JSON.stringify(currentStore));
+  }, [currentStore, stores]);
 
   return (
     <StoreContext.Provider value={{ stores, currentStore, setCurrentStore }}>
