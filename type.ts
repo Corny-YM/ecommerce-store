@@ -1,3 +1,15 @@
+export interface User {
+  id: string;
+  email: string;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  fullName: string | null;
+  imageUrl: string | null;
+  lastName: string | null;
+  firstName: string | null;
+  lastSignInAt: Date | null;
+}
+
 export interface Store {
   id: string;
   name: string;

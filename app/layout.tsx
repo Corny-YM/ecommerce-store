@@ -11,6 +11,7 @@ import { StoreContextProvider } from "@/providers/store-provider";
 
 import "./globals.css";
 import getStores from "@/actions/get-stores";
+import { UserContextProvider } from "@/providers/user-provider";
 
 const font = Urbanist({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <body className={font.className}>
           <ModalProvider />
           <ToastProvider />
+          <UserContextProvider />
           <StoreContextProvider stores={stores}>
             <Navbar />
             {children}

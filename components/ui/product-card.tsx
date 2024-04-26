@@ -1,17 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { MouseEventHandler } from "react";
+import toast from "react-hot-toast";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { MouseEventHandler, useCallback } from "react";
 import { Expand, Info, ShoppingCart } from "lucide-react";
+
 import { Product } from "@/type";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import useCart from "@/hooks/use-cart";
-import usePreviewModal from "@/hooks/use-preview-modal";
 import Currency from "@/components/ui/currency";
 import IconButton from "@/components/ui/icon-button";
-import { useUser } from "@clerk/nextjs";
-import toast from "react-hot-toast";
-import { Button } from "./button";
+import usePreviewModal from "@/hooks/use-preview-modal";
 
 interface Props {
   data: Product;
@@ -53,6 +55,14 @@ const ProductCard = ({ data }: Props) => {
     ));
   };
 
+  const handleClickCategory = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    const target = e.currentTarget as HTMLDivElement;
+    const id = target.dataset.id;
+    if (!id) return;
+    router.push(`/category/${id}`);
+  }, []);
+
   return (
     <div
       className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
@@ -83,8 +93,13 @@ const ProductCard = ({ data }: Props) => {
       {/* Description */}
       <div>
         <p className="font-semibold text-lg">{data.name}</p>
-        {/* <p className="text-sm text-gray-500">{data.category?.name}</p> */}
-        <p className="text-sm text-gray-500">theanh</p>
+        <div className="flex items-center flex-wrap text-sm text-gray-500 gap-x-1 gap-y-1">
+          {data.categoryHasProducts.map((item) => (
+            <Badge data-id={item.categoryId} onClick={handleClickCategory}>
+              {item.category.name}
+            </Badge>
+          ))}
+        </div>
       </div>
 
       {/* Price */}

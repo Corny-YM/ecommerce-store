@@ -26,7 +26,9 @@ const Info = ({ data }: Props) => {
     });
   }, []);
 
-  console.log(data);
+  const handleAddToCart = useCallback(() => {
+    console.log(selected);
+  }, [selected]);
 
   return (
     <div>
@@ -75,7 +77,10 @@ const Info = ({ data }: Props) => {
       </div>
 
       <div className="mt-10 flex items-center gap-x-3">
-        <ButtonBasic className="flex items-center gap-x-2">
+        <ButtonBasic
+          className="flex items-center gap-x-2"
+          onClick={handleAddToCart}
+        >
           Add To Cart <ShoppingCart />
         </ButtonBasic>
       </div>
