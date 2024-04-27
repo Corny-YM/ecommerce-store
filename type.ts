@@ -10,6 +10,20 @@ export interface User {
   lastSignInAt: Date | null;
 }
 
+export interface Cart {
+  id: string;
+  userId: string;
+  storeId: string;
+  productId: string;
+  colorId: string;
+  sizeId: string;
+  user?: User;
+  store?: Store;
+  product?: Product;
+  color?: Color;
+  size?: Size;
+}
+
 export interface Store {
   id: string;
   name: string;

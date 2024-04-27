@@ -1,16 +1,16 @@
 "use client";
 
-import { CircleUserRound, ShoppingBag } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { UserButton, useAuth } from "@clerk/nextjs";
+import { CircleUserRound, ShoppingBag } from "lucide-react";
 
-import useCart from "@/hooks/use-cart";
 import ButtonBasic from "@/components/ui/button-basic";
+import { useQuery } from "@tanstack/react-query";
+import getCartsQuantity from "@/actions/get-carts-quantity";
 
 const NavbarActions = () => {
   const router = useRouter();
-  const cart = useCart();
   const { userId } = useAuth();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -18,6 +18,14 @@ const NavbarActions = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const { data, isLoading } = useQuery({
+    enabled: !!userId,
+    queryKey: ["carts-quantity", "user", userId],
+    queryFn: () => getCartsQuantity(userId!),
+  });
+
+  const quantity = useMemo(() => data?.quantity || 0, [data]);
 
   if (!isMounted) return null;
 
@@ -28,9 +36,11 @@ const NavbarActions = () => {
         onClick={() => router.push("/cart")}
       >
         <ShoppingBag size={20} color="white" />
-        <span className="ml-2 text-sm font-medium text-white">
-          {cart.items.length}
-        </span>
+        {!!userId && (
+          <span className="ml-2 text-sm font-medium text-white">
+            {quantity}
+          </span>
+        )}
       </ButtonBasic>
 
       {!userId && (

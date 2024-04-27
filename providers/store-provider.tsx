@@ -8,6 +8,7 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Store } from "@/type";
 import { useRouter } from "next/navigation";
@@ -16,6 +17,8 @@ interface Props {
   children: React.ReactNode;
   stores: Store[];
 }
+
+const queryClient = new QueryClient();
 
 export interface ContextType {
   stores: Store[];
@@ -40,7 +43,7 @@ export const StoreContextProvider = ({ children, stores }: Props) => {
 
   return (
     <StoreContext.Provider value={{ stores, currentStore, setCurrentStore }}>
-      {children}
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </StoreContext.Provider>
   );
 };
