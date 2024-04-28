@@ -18,7 +18,11 @@ interface Props {
   stores: Store[];
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false, refetchOnWindowFocus: false },
+  },
+});
 
 export interface ContextType {
   stores: Store[];

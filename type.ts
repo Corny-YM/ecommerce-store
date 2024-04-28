@@ -12,6 +12,7 @@ export interface User {
 
 export interface Cart {
   id: string;
+  quantity: number;
   userId: string;
   storeId: string;
   productId: string;
