@@ -89,7 +89,7 @@ const Info = ({ data }: Props) => {
       <div className="flex flex-col gap-y-6">
         <div className="flex items-center gap-x-4">
           <h3 className="font-semibold text-black">Size:</h3>
-          <div className="w-full flex items-center gap-x-2 flex-wrap">
+          <div className="w-full flex items-center gap-2 flex-wrap">
             {data.productHasSizes.map((item) => (
               <Button
                 key={item.id}

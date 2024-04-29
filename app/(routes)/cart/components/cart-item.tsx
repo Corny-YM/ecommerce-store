@@ -2,20 +2,32 @@
 
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { X } from "lucide-react";
+import { LoaderCircle, X } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Cart } from "@/type";
-import { cn, isLightColor } from "@/libs/utils";
+import { cn } from "@/libs/utils";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Currency from "@/components/ui/currency";
 import IconButton from "@/components/ui/icon-button";
 import updateCart from "@/actions/update-cart";
 import useDebounce from "@/hooks/use-debounce";
 import InputQuantity from "./input-quantity";
+import deleteCart from "@/actions/remove-cart";
 
 interface Props {
   data: Cart;
@@ -27,6 +39,8 @@ const CartItem = ({ data, checked, onCheckedChange }: Props) => {
   const queryClient = useQueryClient();
   const { userId } = useAuth();
 
+  const [dialogConfirm, setDialogConfirm] = useState(false);
+
   const { mutate: mutateQuantity, isPending: isPendingQuantity } = useMutation({
     mutationKey: ["update", "cart"],
     mutationFn: updateCart,
@@ -37,6 +51,20 @@ const CartItem = ({ data, checked, onCheckedChange }: Props) => {
       toast.error("Update cart fail. Try it later");
     },
   });
+
+  const { mutate: mutateRemoveCart, isPending: isPendingRemoveCart } =
+    useMutation({
+      mutationKey: ["remove", "cart"],
+      mutationFn: deleteCart,
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: ["users", "carts", userId] });
+        toast.success("Remove cart successfully");
+        setDialogConfirm(false);
+      },
+      onError() {
+        toast.error("Remove cart fail. Try it later");
+      },
+    });
 
   const size = useMemo(() => data.size, [data]);
   const color = useMemo(() => data.color, [data]);
@@ -62,7 +90,10 @@ const CartItem = ({ data, checked, onCheckedChange }: Props) => {
     },
     [data]
   );
-  const handleRemoveCart = useCallback(() => {}, []);
+  const handleRemoveCart = useCallback(() => {
+    if (!userId) return;
+    mutateRemoveCart({ userId, cartId: data.id });
+  }, [data, userId]);
 
   if (!product) return;
   return (
@@ -82,7 +113,41 @@ const CartItem = ({ data, checked, onCheckedChange }: Props) => {
 
       <div className="relative ml-4 flex flex-1 flex-col justify-center sm:ml-6">
         <div className="absolute z-10 right-0 top-1/2 -translate-y-1/2">
-          <IconButton icon={<X size={15} />} onClick={handleRemoveCart} />
+          <AlertDialog open={dialogConfirm}>
+            <AlertDialogTrigger asChild>
+              <IconButton
+                icon={<X size={15} />}
+                disabled={isPendingRemoveCart}
+                onClick={() => setDialogConfirm(true)}
+              />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your cart and remove your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setDialogConfirm(false)}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="w-20 bg-rose-500 hover:bg-rose-600"
+                  onClick={handleRemoveCart}
+                >
+                  {!isPendingRemoveCart ? (
+                    "Remove"
+                  ) : (
+                    <div className="flex w-full justify-center items-center animate-spin">
+                      <LoaderCircle />
+                    </div>
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
 
         <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 gap-y-2 sm:pr-0">
