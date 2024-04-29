@@ -36,7 +36,7 @@ const Billboard = ({ categoryId }: BillboardProps) => {
 
   const currentBillboard = useMemo(() => category?.billboard, [category]);
 
-  if (!currentBillboard) return null;
+  if (!currentBillboard) return <div className="mb-10" />;
   return (
     <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden">
       <div

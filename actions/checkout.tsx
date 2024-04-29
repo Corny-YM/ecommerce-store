@@ -1,15 +1,17 @@
 import { storeInstance } from "@/libs";
-import { Cart } from "@/type";
 
-interface ICartData {
-  quantity: number;
-  cartId: string;
-}
-
-const updateCart = async (data: ICartData): Promise<Cart> => {
-  const res = await storeInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-    productIds: items.map((item) => item.id),
+const checkout = async ({
+  userId,
+  cartIds,
+}: {
+  userId: String;
+  cartIds: string[];
+}): Promise<{ url: string }> => {
+  const res = await storeInstance.post(`checkout`, {
+    userId,
+    cartIds,
   });
+  return res.data;
 };
 
-export default updateCart;
+export default checkout;

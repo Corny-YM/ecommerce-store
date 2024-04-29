@@ -93,7 +93,10 @@ const CartPage = () => {
       const isAllChecked = Object.values(obj).every((item) => item);
 
       return (
-        <div key={store.id} className="w-full flex flex-col justify-center">
+        <div
+          key={store.id}
+          className="w-full flex flex-col justify-center mb-4"
+        >
           <div className="flex items-center">
             <Checkbox
               checked={isAllChecked}

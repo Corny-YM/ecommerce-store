@@ -43,9 +43,7 @@ const CartItem = ({ data, checked, onCheckedChange }: Props) => {
   const product = useMemo(() => data.product, [data]);
 
   const isLight = useMemo(() => {
-    const colorValue = color?.value;
-    if (!colorValue) return false;
-    return isLightColor(colorValue);
+    return color?.name.toLowerCase() === "white";
   }, [color]);
 
   const onActionMutate = useCallback(

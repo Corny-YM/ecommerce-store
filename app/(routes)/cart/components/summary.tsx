@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import { Cart } from "@/type";
@@ -10,6 +10,9 @@ import { Badge } from "@/components/ui/badge";
 import ButtonBasic from "@/components/ui/button-basic";
 import Currency from "@/components/ui/currency";
 import { ICheckItems } from "../page";
+import { useMutation } from "@tanstack/react-query";
+import checkout from "@/actions/checkout";
+import { useAuth } from "@clerk/nextjs";
 
 interface Props {
   data?: Cart[];
@@ -18,6 +21,7 @@ interface Props {
 
 const Summary = ({ data, checkedItems }: Props) => {
   const searchParams = useSearchParams();
+  const { userId } = useAuth();
 
   const [buyItems, setBuyItems] = useState<Cart[]>([]);
 
@@ -36,15 +40,26 @@ const Summary = ({ data, checkedItems }: Props) => {
     setBuyItems(data.filter((item) => checkedIds.includes(item.id)));
   }, [data, checkedItems]);
 
-  // useEffect(() => {
-  //   if (searchParams.get("success")) {
-  //     toast.success("Payment completed");
-  //     removeAll();
-  //   }
-  //   if (searchParams.get("canceled")) {
-  //     toast.error("Something went wrong");
-  //   }
-  // }, [searchParams]);
+  useEffect(() => {
+    if (searchParams.get("success")) {
+      toast.success("Payment completed");
+    }
+    if (searchParams.get("canceled")) {
+      toast.error("Something went wrong");
+    }
+  }, [searchParams]);
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["cart", "checkout"],
+    mutationFn: checkout,
+    onSuccess(res) {
+      toast.success("Checkout successfully");
+      window.location = res.url as any;
+    },
+    onError() {
+      toast.error("Checkout fail. Try it later");
+    },
+  });
 
   const totalPrice = useMemo(
     () =>
@@ -55,16 +70,11 @@ const Summary = ({ data, checkedItems }: Props) => {
     [buyItems]
   );
 
-  const onCheckout = async () => {
-    // // TODO: fix api
-    // const res = await axios.post(
-    //   `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-    //   {
-    //     productIds: items.map((item) => item.id),
-    //   }
-    // );
-    // window.location = res.data.url;
-  };
+  const onCheckout = useCallback(() => {
+    if (!userId) return;
+    const ids = buyItems.map((item) => item.id);
+    mutate({ userId, cartIds: ids });
+  }, [buyItems, userId]);
 
   return (
     <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-4 lg:mt-0 lg:p-8">
@@ -97,8 +107,8 @@ const Summary = ({ data, checkedItems }: Props) => {
         </div>
       </div>
       <ButtonBasic
-        disabled={buyItems?.length === 0}
         className="w-full mt-6"
+        disabled={buyItems?.length === 0 || isPending}
         onClick={onCheckout}
       >
         Checkout
