@@ -97,6 +97,7 @@ const Info = ({ data }: Props) => {
                 variant={
                   selected.sizeId === item.sizeId ? "default" : "outline"
                 }
+                disabled={data.isArchived}
                 onClick={() => onSelect("sizeId", item.sizeId)}
               >
                 {item.size.name}
@@ -115,6 +116,7 @@ const Info = ({ data }: Props) => {
                   selected.colorId === item.colorId && "scale-150"
                 )}
                 size="icon"
+                disabled={data.isArchived}
                 style={{ backgroundColor: item.color.value }}
                 onClick={() => onSelect("colorId", item.colorId)}
               />
@@ -124,20 +126,31 @@ const Info = ({ data }: Props) => {
       </div>
 
       <div className="mt-10 flex items-center gap-x-3">
-        <ButtonBasic
-          className="flex items-center gap-x-2"
-          disabled={disabled}
-          onClick={handleAddToCart}
-        >
-          Add To Cart
-          {!isPending ? (
-            <ShoppingCart />
-          ) : (
-            <div className="animate-spin">
-              <LoaderCircle />
-            </div>
-          )}
-        </ButtonBasic>
+        {!data.isArchived && (
+          <ButtonBasic
+            className="flex items-center gap-x-2"
+            disabled={disabled}
+            onClick={handleAddToCart}
+          >
+            Add To Cart
+            {!isPending ? (
+              <ShoppingCart />
+            ) : (
+              <div className="animate-spin">
+                <LoaderCircle />
+              </div>
+            )}
+          </ButtonBasic>
+        )}
+        {data.isArchived && (
+          <ButtonBasic
+            className="flex items-center gap-x-2"
+            disabled={disabled}
+            onClick={handleAddToCart}
+          >
+            Sold out
+          </ButtonBasic>
+        )}
       </div>
     </div>
   );

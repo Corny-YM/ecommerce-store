@@ -6,6 +6,7 @@ export interface IProductParams {
   colorId?: string;
   sizeId?: string;
   isFeatured?: boolean;
+  name?: string;
 }
 
 const getProducts = async (

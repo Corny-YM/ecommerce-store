@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserButton, useAuth } from "@clerk/nextjs";
-import { CircleUserRound, ShoppingBag } from "lucide-react";
-
-import ButtonBasic from "@/components/ui/button-basic";
 import { useQuery } from "@tanstack/react-query";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { CircleUserRound, Search, ShoppingBag } from "lucide-react";
+
 import getCartsQuantity from "@/actions/get-carts-quantity";
+import ButtonBasic from "@/components/ui/button-basic";
+import SearchModal from "@/components/search-modal";
 
 const NavbarActions = () => {
   const router = useRouter();
   const { userId } = useAuth();
 
+  const [open, setOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -27,10 +29,17 @@ const NavbarActions = () => {
 
   const quantity = useMemo(() => data?.quantity || 0, [data]);
 
-  if (!isMounted) return null;
+  const handleSearching = useCallback(() => setOpen(true), []);
 
+  if (!isMounted) return null;
   return (
-    <div className="ml-auto flex items-center gap-x-4">
+    <div className="ml-auto flex items-center gap-x-2">
+      <ButtonBasic
+        className="flex items-center rounded-full bg-black px-4 py-2"
+        onClick={handleSearching}
+      >
+        <Search size={20} />
+      </ButtonBasic>
       <ButtonBasic
         className="flex items-center rounded-full bg-black px-4 py-2"
         onClick={() => router.push("/cart")}
@@ -52,6 +61,8 @@ const NavbarActions = () => {
         </ButtonBasic>
       )}
       {userId && <UserButton afterSignOutUrl="/" />}
+
+      <SearchModal open={open} onClose={() => setOpen(false)} />
     </div>
   );
 };

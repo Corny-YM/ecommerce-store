@@ -7,7 +7,7 @@ import StoreSwitcher from "@/components/store-switcher";
 
 const Navbar = async () => {
   return (
-    <div className="border-b">
+    <div className="border-b sticky top-0 z-50 bg-white shadow-lg">
       <Container>
         <div className="relative px-4 sm:px-6 lg:px-8 flex h-16 items-center">
           <StoreSwitcher className="mr-4" />

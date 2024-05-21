@@ -61,6 +61,7 @@ const ProductCard = ({ data }: Props) => {
     (event: React.MouseEvent) => {
       event.stopPropagation();
       if (!userId) return handleToast();
+      if (data.isArchived) return toast.error("This product is out of stock");
       const storeId = currentStore?.id;
       const productId = data.id;
       const colorId = data.productHasColors[0]?.colorId;
@@ -69,7 +70,7 @@ const ProductCard = ({ data }: Props) => {
 
       mutate({ userId, storeId, productId, colorId, sizeId });
     },
-    [userId, currentStore]
+    [userId, currentStore, data]
   );
 
   const handleClickCategory = useCallback(
@@ -142,7 +143,11 @@ const ProductCard = ({ data }: Props) => {
         <p className="font-semibold text-lg">{data.name}</p>
         <div className="flex items-center flex-wrap text-sm text-gray-500 gap-x-1 gap-y-1">
           {data.categoryHasProducts.map((item) => (
-            <Badge data-id={item.categoryId} onClick={handleClickCategory}>
+            <Badge
+              key={item.categoryId}
+              data-id={item.categoryId}
+              onClick={handleClickCategory}
+            >
               {item.category.name}
             </Badge>
           ))}
