@@ -33,20 +33,20 @@ const NavbarActions = () => {
 
   if (!isMounted) return null;
   return (
-    <div className="ml-auto flex items-center gap-x-2">
+    <div className="ml-auto flex items-center gap-x-1  md:gap-x-2">
       <ButtonBasic
-        className="flex items-center rounded-full bg-black px-4 py-2"
+        className="flex items-center rounded-full bg-black px-2 md:px-4 py-2"
         onClick={handleSearching}
       >
         <Search size={20} />
       </ButtonBasic>
       <ButtonBasic
-        className="flex items-center rounded-full bg-black px-4 py-2"
+        className="flex items-center rounded-full bg-black px-2 md:px-4 py-2"
         onClick={() => router.push("/cart")}
       >
         <ShoppingBag size={20} color="white" />
         {!!userId && (
-          <span className="ml-2 text-sm font-medium text-white">
+          <span className="hidden md:block ml-2 text-sm font-medium text-white">
             {quantity}
           </span>
         )}
@@ -54,7 +54,7 @@ const NavbarActions = () => {
 
       {!userId && (
         <ButtonBasic
-          className="flex items-center rounded-full bg-black px-4 py-2"
+          className="flex items-center rounded-full bg-black px-2 md:px-4 py-2"
           onClick={() => router.push("/sign-in")}
         >
           <CircleUserRound size={20} color="white" />

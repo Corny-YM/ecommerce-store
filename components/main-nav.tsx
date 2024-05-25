@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
+import getCategories from "@/actions/get-categories";
 import { cn } from "@/libs/utils";
 import { Category } from "@/type";
 import { useStoreContext } from "@/providers/store-provider";
-import getCategories from "@/actions/get-categories";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import NavbarSheet from "./navbar-sheet";
 
 interface MainNavProps {
   data: Category[];
@@ -37,21 +39,35 @@ const MainNav = () => {
     [categories, currentStore]
   );
 
-  return (
-    <nav className="mx-6 flex items-center space-x-4 lg:space-x-6">
-      {routes.map((route) => (
+  const content = useMemo(
+    () =>
+      routes.map((route) => (
         <Link
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-black hover:font-semibold",
+            "flex min-w-fit text-sm font-medium transition-colors hover:text-black hover:font-semibold",
             route.active ? "text-black font-semibold" : "text-neutral-500"
           )}
         >
           {route.label}
         </Link>
-      ))}
-    </nav>
+      )),
+    [routes]
+  );
+
+  return (
+    <>
+      <div className="flex items-center justify-center md:hidden">
+        <NavbarSheet routes={routes} />
+      </div>
+      <ScrollArea className="hidden md:block mx-6 py-4 max-w-full">
+        <nav className="flex items-center space-x-4 lg:space-x-6">
+          {content}
+        </nav>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </>
   );
 };
 
