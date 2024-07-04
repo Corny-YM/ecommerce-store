@@ -104,60 +104,71 @@ const ProductCard = ({ data }: Props) => {
 
   return (
     <div
-      className="bg-white group cursor-pointer rounded-xl border p-3 space-y-4"
+      className="relative bg-white group cursor-pointer rounded-xl border p-3"
       onClick={handleClick}
     >
-      {/* Images & Actions */}
-      <div className="aspect-square rounded-xl bg-gray-100 relative">
-        <Image
-          alt="Image"
-          src={data?.images?.[0].url}
-          fill
-          className="aspect-square object-contain rounded-md bg-neutral-100"
-        />
-        <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
-          <div className="flex gap-x-6 justify-center">
-            <IconButton
-              icon={<Expand size={20} className="text-gray-600" />}
-              onClick={handlePreview}
-            />
-            <IconButton
-              disabled={isPending}
-              icon={
-                !isPending ? (
-                  <ShoppingCart size={20} className="text-gray-600" />
-                ) : (
-                  <div className="animate-spin">
-                    <LoaderCircle />
-                  </div>
-                )
-              }
-              onClick={handleAddToCart}
-            />
+      <div className="space-y-4">
+        {/* Images & Actions */}
+        <div className="aspect-square rounded-xl bg-gray-100 relative">
+          <Image
+            alt="Image"
+            src={data?.images?.[0].url}
+            fill
+            className="aspect-square object-contain rounded-md bg-neutral-100"
+          />
+          <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
+            <div className="flex gap-x-6 justify-center">
+              <IconButton
+                icon={<Expand size={20} className="text-gray-600" />}
+                onClick={handlePreview}
+              />
+              {!data.isArchived && (
+                <IconButton
+                  disabled={isPending}
+                  icon={
+                    !isPending ? (
+                      <ShoppingCart size={20} className="text-gray-600" />
+                    ) : (
+                      <div className="animate-spin">
+                        <LoaderCircle />
+                      </div>
+                    )
+                  }
+                  onClick={handleAddToCart}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Description */}
-      <div>
-        <p className="font-semibold text-lg">{data.name}</p>
-        <div className="flex items-center flex-wrap text-sm text-gray-500 gap-x-1 gap-y-1">
-          {data.categoryHasProducts.map((item) => (
-            <Badge
-              key={item.categoryId}
-              data-id={item.categoryId}
-              onClick={handleClickCategory}
-            >
-              {item.category.name}
-            </Badge>
-          ))}
+        {/* Description */}
+        <div>
+          <p className="font-semibold text-lg">{data.name}</p>
+          <div className="flex items-center flex-wrap text-sm text-gray-500 gap-x-1 gap-y-1">
+            {data.categoryHasProducts.map((item) => (
+              <Badge
+                key={item.categoryId}
+                data-id={item.categoryId}
+                onClick={handleClickCategory}
+              >
+                {item.category.name}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center justify-between">
+          <Currency value={data.price} />
         </div>
       </div>
-
-      {/* Price */}
-      <div className="flex items-center justify-between">
-        <Currency value={data.price} />
-      </div>
+      {data.isArchived && (
+        <div className="absolute top-1 right-1 select-none">
+          <Badge className="cursor-default bg-red-400 hover:bg-red-400">
+            Sold out
+          </Badge>
+        </div>
+      )}
     </div>
   );
 };
