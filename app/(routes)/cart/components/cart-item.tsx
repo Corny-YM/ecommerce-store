@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { LoaderCircle, X } from "lucide-react";
 import { useAuth } from "@clerk/nextjs";
+import { LoaderCircle, X } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

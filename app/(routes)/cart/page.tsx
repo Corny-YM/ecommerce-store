@@ -6,12 +6,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useStoreContext } from "@/providers/store-provider";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import Container from "@/components/ui/container";
 import getCarts from "@/actions/get-carts";
-import CartItem from "./components/cart-item";
 import Summary from "./components/summary";
+import CartItem from "./components/cart-item";
+import TabActions from "./components/tab-actions";
 
 export type ICheckItems = { [key: string]: { [key: string]: boolean } };
 
@@ -128,16 +129,9 @@ const CartPage = () => {
   if (!isMounted) return null;
 
   return (
-    <div className="bg-white">
-      <Container>
-        <div className="px-4 py-16 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-black">ShoppingCart</h1>
-          <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
-            <div className="lg:col-span-8">{content}</div>
-            <Summary data={data} checkedItems={checkedItems} />
-          </div>
-        </div>
-      </Container>
+    <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
+      <div className="lg:col-span-8">{content}</div>
+      <Summary data={data} checkedItems={checkedItems} />
     </div>
   );
 };
