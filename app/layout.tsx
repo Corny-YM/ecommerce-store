@@ -30,14 +30,15 @@ export default async function RootLayout({
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en">
         <body className={font.className}>
-          <UserContextProvider />
-          <StoreContextProvider stores={stores}>
-            <ModalProvider />
-            <ToastProvider />
-            <Navbar />
-            {children}
-            <Footer />
-          </StoreContextProvider>
+          <UserContextProvider>
+            <StoreContextProvider stores={stores}>
+              <ModalProvider />
+              <ToastProvider />
+              <Navbar />
+              {children}
+              <Footer />
+            </StoreContextProvider>
+          </UserContextProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -9,7 +9,9 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export interface ContextType {}
+export interface ContextType {
+  user?: User | null;
+}
 
 const UserContext = createContext<ContextType>({});
 
@@ -54,7 +56,9 @@ export const UserContextProvider = ({ children }: Props) => {
     fetch();
   }, [clerkUser]);
 
-  return <UserContext.Provider value={{}}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+  );
 };
 
 export const useUserContext = () => {

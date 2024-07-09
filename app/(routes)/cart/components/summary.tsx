@@ -1,18 +1,19 @@
 "use client";
 
-import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-
-import { Cart } from "@/type";
-import { Badge } from "@/components/ui/badge";
-import ButtonBasic from "@/components/ui/button-basic";
-import Currency from "@/components/ui/currency";
-import { ICheckItems } from "../page";
-import { useMutation } from "@tanstack/react-query";
-import checkout from "@/actions/checkout";
 import { useAuth } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import checkout from "@/actions/checkout";
+import { Cart } from "@/type";
+import { ICheckItems } from "../page";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import Currency from "@/components/ui/currency";
+import ButtonBasic from "@/components/ui/button-basic";
+import CodDialog from "./cod-dialog";
 
 interface Props {
   data?: Cart[];
@@ -23,6 +24,8 @@ const Summary = ({ data, checkedItems }: Props) => {
   const searchParams = useSearchParams();
   const { userId } = useAuth();
 
+  // const [open, setOpen] = useState(false);
+  // const [selected, setSelected] = useState("card");
   const [buyItems, setBuyItems] = useState<Cart[]>([]);
 
   useEffect(() => {
@@ -106,6 +109,34 @@ const Summary = ({ data, checkedItems }: Props) => {
           <Currency value={totalPrice} />
         </div>
       </div>
+      {/* <div className="w-full flex flex-col space-y-2 mt-8 mb-4">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="card"
+            checked={selected === "card"}
+            onCheckedChange={(val) => val && setSelected("card")}
+          />
+          <label
+            htmlFor="card"
+            className="font-bold leading-none select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Payment by card
+          </label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="cod"
+            checked={selected === "cod"}
+            onCheckedChange={(val) => val && setSelected("cod")}
+          />
+          <label
+            htmlFor="cod"
+            className="font-bold leading-none select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Cash on delivery (COD)
+          </label>
+        </div>
+      </div> */}
       <ButtonBasic
         className="w-full mt-6"
         disabled={buyItems?.length === 0 || isPending}
@@ -113,6 +144,8 @@ const Summary = ({ data, checkedItems }: Props) => {
       >
         Checkout
       </ButtonBasic>
+
+      {/* <CodDialog open={open} onOpenChange={setOpen} /> */}
     </div>
   );
 };

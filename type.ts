@@ -10,6 +10,33 @@ export interface User {
   lastSignInAt: Date | null;
 }
 
+export interface Order {
+  id: string;
+  phone: string;
+  address: string | null;
+  isPaid: boolean;
+  totalPrice?: number;
+  orderItems: OrderItem[];
+  createdAt: Date | null;
+  updatedAt: Date | null;
+}
+
+export interface OrderItem {
+  id: number;
+  quantity: number;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  orderId: string;
+  storeId: string;
+  productId: string;
+  sizeId: string;
+  colorId: string;
+  product: Product;
+  color: Color;
+  size: Size;
+  store: Store;
+}
+
 export interface Cart {
   id: string;
   quantity: number;
@@ -100,6 +127,7 @@ export interface Product {
   updatedAt: Date;
   storeId: string;
   images: Image[];
+  quantity?: number;
   productHasSizes: ProductHasSize[];
   productHasColors: ProductHasColor[];
   categoryHasProducts: CategoryHasProduct[];
